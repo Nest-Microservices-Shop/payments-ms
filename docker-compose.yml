@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  payments-ms:
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
+    ports:
+      - ${PAYMENTS_PORT}:${PAYMENTS_PORT}
+    image: fmyersdev/payments-ms:latest
+    environment:
+      - NATS_SERVERS=nats://nats-server:4222
+      - PORT=${PAYMENTS_PORT}
+      - STRIPE_SECRET=${PAYMENTS_STRIPE_SECRET}
+      - STRIPE_SUCCESS_URL=${PAYMENTS_STRIPE_SUCCESS_URL}
+      - STRIPE_CANCEL_URL=${PAYMENTS_STRIPE_CANCEL_URL}
+      - STRIPE_ENDPOINT_SECRET=${PAYMENTS_STRIPE_ENDPOINT_SECRET}

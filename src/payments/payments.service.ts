@@ -10,7 +10,7 @@ export class PaymentsService {
   private readonly logger = new Logger('PaymentsService');
   private readonly stripe = new Stripe(envs.stripeSecret);
 
-  constructor(@Inject(NATS_SERVICE) private readonly CLient: ClientProxy) {}
+  constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   async createPaymentSession(paymentSessionDto: PaymentSessionDto) {
     const { currency, items, orderId } = paymentSessionDto;
@@ -71,7 +71,7 @@ export class PaymentsService {
           orderId: chargeSucceeded.metadata.orderId,
           receiptUrl: chargeSucceeded.receipt_url,
         };
-        this.CLient.emit('payment.succeeded', payload);
+        this.client.emit('payment.succeeded', payload);
         break;
       default:
         console.log(`Event ${event.type} no handled`);
